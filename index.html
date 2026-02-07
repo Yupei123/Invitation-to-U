@@ -1,62 +1,262 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>二選一分支問答</title>
+  <style>
+    :root{
+      --bg:#0b1220; --card:#111a2e; --muted:#93a4c7; --text:#eaf0ff;
+      --btn:#1b2a4a; --btnHover:#22345c; --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans TC", Arial;
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(122,162,255,.25), transparent 50%),
+                  radial-gradient(900px 600px at 90% 20%, rgba(74,222,128,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text); min-height:100vh; display:flex; align-items:center; justify-content:center;
+      padding:24px; box-sizing:border-box;
+    }
+    .wrap{ width:min(720px, 100%); }
+    .topbar{ display:flex; justify-content:space-between; gap:12px; margin-bottom:14px; color:var(--muted); font-size:14px; flex-wrap:wrap;}
+    .pill{ display:inline-flex; gap:8px; align-items:center; background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08); padding:8px 12px; border-radius:999px; box-shadow: 0 4px 18px rgba(0,0,0,.18);
+      backdrop-filter: blur(6px);
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:22px;
+    }
+    .title{ font-size:22px; line-height:1.35; margin:0 0 10px 0; }
+    .desc{ margin:0 0 18px 0; color:var(--muted); line-height:1.6; font-size:15px; }
+    .options{ display:grid; gap:12px; margin-top:10px; }
+    button.option{
+      width:100%; text-align:left; background: var(--btn); color:var(--text);
+      border:1px solid rgba(255,255,255,.10); border-radius: 14px; padding:14px;
+      cursor:pointer; transition: transform .06s ease, background .15s ease, border-color .15s ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,.22); display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:16px;
+    }
+    button.option:hover{ background: var(--btnHover); border-color: rgba(122,162,255,.45); }
+    button.option:active{ transform: translateY(1px); }
+    .arrow{ color: rgba(234,240,255,.7); font-weight:700; font-size:18px; }
+    .footer{ display:flex; justify-content:space-between; gap:10px; margin-top:16px; color:var(--muted); font-size:13px; flex-wrap:wrap; }
+    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; }
+    .smallbtn{ background: rgba(255,255,255,.06); color: var(--text);
+      border:1px solid rgba(255,255,255,.10); padding:10px 12px; border-radius: 12px; cursor:pointer;
+    }
+    .smallbtn:hover{ border-color: rgba(255,255,255,.22); }
+    .resultBox{
+      margin-top:14px; background: rgba(255,255,255,.05); border:1px dashed rgba(255,255,255,.18);
+      border-radius: 14px; padding:14px; color: var(--muted); font-size:14px; line-height:1.6; white-space:pre-wrap;
+    }
   </style>
 </head>
+
 <body>
-<p class="p1">const QUESTIONS = {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>start: {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>title: "Question 1: Did you miss me today? Answer carefully.",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>desc: "",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>a: { text: "No, you jerk", next: "END_HEARTBROKEN" },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>b: { text: "Of course!", next: "q2" }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>},</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>q2: {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>title: "Question 2: Are you free to look at the dorms together tomorrow?",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>desc: "",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>a: { text: "No, I can't stand the buck teeth", next: "END_UNDERSTAND" },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>b: { text: "Sure! What time?", next: "q3" }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>},</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>q3: {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>title: "Q3：我該幾點去健身房？",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>desc: "",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>a: { text: "德國時間中午 12 點", next: "END_CUTIE" },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>b: { text: "德國時間下午 4 點", next: "END_CUTIE" }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>},</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// 結局頁 1：心碎哭哭</p>
-<p class="p1"><span class="Apple-converted-space">  </span>END_HEARTBROKEN: {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>title: "💔 Heartbroken crying",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>desc: "😭",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>a: { text: "Restart", next: "start" },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>b: { text: "End", next: "END" }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>},</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// 結局頁 2：我懂我懂</p>
-<p class="p1"><span class="Apple-converted-space">  </span>END_UNDERSTAND: {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>title: "I understand, I understand",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>desc: "…",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>a: { text: "Restart", next: "start" },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>b: { text: "End", next: "END" }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>},</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// 結局頁 3：明天見 cutie</p>
-<p class="p1"><span class="Apple-converted-space">  </span>END_CUTIE: {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>title: "明天見 cutie",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>desc: "✨",</p>
-<p class="p1"><span class="Apple-converted-space">    </span>a: { text: "Restart", next: "start" },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>b: { text: "End", next: "END" }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">};</p>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="pill"><span>🧭</span><span id="progressText">題目：-</span></div>
+      <div class="pill"><span>🔗</span><span>點選後自動跳下一題</span></div>
+    </div>
+
+    <div class="card">
+      <h1 class="title" id="qTitle">載入中…</h1>
+      <p class="desc" id="qDesc"></p>
+      <div class="options" id="options"></div>
+
+      <div class="footer">
+        <div class="btnRow">
+          <button class="smallbtn" id="backBtn">← 上一題</button>
+          <button class="smallbtn" id="restartBtn">重新開始</button>
+          <button class="smallbtn" id="shareBtn">複製目前連結</button>
+        </div>
+        <div id="debugText"></div>
+      </div>
+
+      <div class="resultBox" id="resultBox" style="display:none;"></div>
+    </div>
+  </div>
+
+<script>
+/* ✅ 你的題庫（已放入 Q1~Q3 + 三個結局頁） */
+const QUESTIONS = {
+  start: {
+    title: "Question 1: Did you miss me today? Answer carefully.",
+    desc: "",
+    a: { text: "No, you jerk", next: "END_HEARTBROKEN" },
+    b: { text: "Of course!", next: "q2" }
+  },
+
+  q2: {
+    title: "Question 2: Are you free to look at the dorms together tomorrow?",
+    desc: "",
+    a: { text: "No, I can't stand the buck teeth", next: "END_UNDERSTAND" },
+    b: { text: "Sure! What time?", next: "q3" }
+  },
+
+  q3: {
+    title: "Q3：我該幾點去健身房？",
+    desc: "",
+    a: { text: "德國時間中午 12 點", next: "END_CUTIE" },
+    b: { text: "德國時間下午 4 點", next: "END_CUTIE" }
+  },
+
+  END_HEARTBROKEN: {
+    title: "💔 Heartbroken crying",
+    desc: "😭",
+    a: { text: "Restart", next: "start" },
+    b: { text: "End", next: "END" }
+  },
+
+  END_UNDERSTAND: {
+    title: "I understand, I understand",
+    desc: "…",
+    a: { text: "Restart", next: "start" },
+    b: { text: "End", next: "END" }
+  },
+
+  END_CUTIE: {
+    title: "明天見 cutie",
+    desc: "✨",
+    a: { text: "Restart", next: "start" },
+    b: { text: "End", next: "END" }
+  }
+};
+
+// ------------------------
+// App logic（不用改）
+// ------------------------
+const $ = (sel) => document.querySelector(sel);
+const qTitle = $("#qTitle");
+const qDesc = $("#qDesc");
+const optionsEl = $("#options");
+const progressText = $("#progressText");
+const backBtn = $("#backBtn");
+const restartBtn = $("#restartBtn");
+const shareBtn = $("#shareBtn");
+const resultBox = $("#resultBox");
+const debugText = $("#debugText");
+
+let historyStack = [];
+let currentId = "start";
+
+function isValidQuestionId(id){
+  return id === "END" || Object.prototype.hasOwnProperty.call(QUESTIONS, id);
+}
+function setHash(id){ location.hash = encodeURIComponent(id); }
+function getHash(){
+  const h = decodeURIComponent((location.hash || "").replace("#","")).trim();
+  return h || null;
+}
+
+function render(id){
+  currentId = id;
+
+  if(id === "END"){
+    qTitle.textContent = "✅ 已完成";
+    qDesc.textContent = "你可以重新開始或複製目前連結。";
+    optionsEl.innerHTML = "";
+    resultBox.style.display = "block";
+    resultBox.textContent = buildSummary();
+    progressText.textContent = `題目：END`;
+    debugText.textContent = "";
+    return;
+  }
+
+  const q = QUESTIONS[id];
+  if(!q){
+    qTitle.textContent = "⚠️ 找不到題目";
+    qDesc.textContent = `目前 id="${id}" 不存在，請檢查 QUESTIONS。`;
+    optionsEl.innerHTML = "";
+    resultBox.style.display = "block";
+    resultBox.textContent = buildSummary();
+    progressText.textContent = `題目：?`;
+    return;
+  }
+
+  qTitle.textContent = q.title || "(未命名題目)";
+  qDesc.textContent = q.desc || "";
+  resultBox.style.display = "none";
+
+  const btns = [];
+  if(q.a) btns.push(makeOptionButton("A", q.a.text, q.a.next));
+  if(q.b) btns.push(makeOptionButton("B", q.b.text, q.b.next));
+  optionsEl.innerHTML = "";
+  btns.forEach(btn => optionsEl.appendChild(btn));
+
+  progressText.textContent = `題目：${id}`;
+  debugText.textContent = "";
+}
+
+function makeOptionButton(label, text, nextId){
+  const btn = document.createElement("button");
+  btn.className = "option";
+  btn.innerHTML = `<span><strong>${label}.</strong> ${escapeHtml(text || "")}</span><span class="arrow">→</span>`;
+  btn.addEventListener("click", () => {
+    if(!isValidQuestionId(nextId)){
+      alert(`下一題 id="${nextId}" 不存在，請檢查 QUESTIONS。`);
+      return;
+    }
+    historyStack.push({ id: currentId, choice: label, text: text || "" });
+    setHash(nextId);
+    render(nextId);
+  });
+  return btn;
+}
+
+function buildSummary(){
+  if(historyStack.length === 0) return "（尚未作答）";
+  return historyStack.map((h,i)=>`${i+1}. [${h.id}] 選 ${h.choice}：${h.text}`).join("\n");
+}
+
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+backBtn.addEventListener("click", () => {
+  if(historyStack.length === 0){
+    alert("已經在第一題了。");
+    return;
+  }
+  const last = historyStack.pop();
+  setHash(last.id);
+  render(last.id);
+});
+
+restartBtn.addEventListener("click", () => {
+  historyStack = [];
+  setHash("start");
+  render("start");
+});
+
+shareBtn.addEventListener("click", async () => {
+  const url = location.href;
+  try{
+    await navigator.clipboard.writeText(url);
+    alert("已複製目前連結（含進度）✅");
+  }catch(e){
+    prompt("無法自動複製，請手動複製：", url);
+  }
+});
+
+(function init(){
+  const h = getHash();
+  if(h && isValidQuestionId(h)){
+    render(h);
+  }else{
+    setHash("start");
+    render("start");
+  }
+})();
+</script>
 </body>
 </html>
